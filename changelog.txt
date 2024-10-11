@@ -1,0 +1,3 @@
+- Refactor to support more generic farmland types
+- Compatible with CAN crops farmland
+- Farmland never drops as "moist" farmland so that all farmlands of the same type are stackable (moisture content is still retained)

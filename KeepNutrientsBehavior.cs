@@ -1,10 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using Vintagestory.API.Client;
 using Vintagestory.API.Common;
-using Vintagestory.API.Config;
 using Vintagestory.API.Datastructures;
 using Vintagestory.API.MathTools;
 using Vintagestory.GameContent;
@@ -21,12 +18,10 @@ public class KeepNutrientsBehavior : BlockBehavior
         ref EnumHandling handling)
     {
         world.BlockAccessor.SetBlock(block.BlockId, blockSel.Position, byItemStack);
-        //FDWNCore.Logger.Warning("Placing farmland with nutrients");
-        if (world.BlockAccessor.GetBlockEntity(blockSel.Position) is not BlockEntityFarmland blockEntity) return true;
-        //FDWNCore.Logger.Warning("Placing farmland with nutrients handling");
+        if (!world.BlockAccessor.GetBlockEntity(blockSel.Position).IsAcceptableFarmland(out var blockEntity)) return true;
         var farmlandAttributes = ((TreeAttribute)byItemStack.Attributes).GetAttribute("farmlandAttributes") as TreeAttribute;
-        this.FromTreeAttributes(farmlandAttributes, blockEntity);
-        blockEntity.MarkDirty();
+        this.FromTreeAttributes(farmlandAttributes, blockEntity, world);
+        ((BlockEntity)blockEntity).MarkDirty();
         handling = EnumHandling.PreventDefault;
         return true;
     }
@@ -39,19 +34,20 @@ public class KeepNutrientsBehavior : BlockBehavior
         ref EnumHandling handling)
     {
         if (byPlayer != null && byPlayer.WorldData.CurrentGameMode == EnumGameMode.Creative ||
-            world.BlockAccessor.GetBlockEntity(pos) is not BlockEntityFarmland blockEntity)
+            !world.BlockAccessor.GetBlockEntity(pos).IsAcceptableFarmland(out var blockEntity))
         {
             return Array.Empty<ItemStack>();
         }
+        ((BlockEntity) blockEntity).MarkDirty();
         handling = EnumHandling.PreventDefault;
         // Drop soil block if nutrients are default and moisture is 0
         var slowReleaseNutrients = blockEntity.GetField<float[]>("slowReleaseNutrients");
-        if (blockEntity.Nutrients.Zip(blockEntity.originalFertility, (n, o) => Math.Abs(n - o) < 0.001).Any(b => b)
+        if (blockEntity.Nutrients.Zip(blockEntity.GetOriginalFertility(), (n, o) => Math.Abs(n - o) < 0.001).Any(b => b)
             && blockEntity.MoistureLevel < 0.001 && !slowReleaseNutrients.Any(n => n > 0.001))
         {
             return new[]
             {
-                new ItemStack(world.GetBlock(new AssetLocation("game", "soil-" + block.FirstCodePart(2) + "-none")), 1)
+                new ItemStack(world.GetBlock(new AssetLocation("game", "soil-" + block.FirstCodePart(2) + "-none")))
             };
         }
         
@@ -59,17 +55,19 @@ public class KeepNutrientsBehavior : BlockBehavior
         var farmlandAttributes = new TreeAttribute();
         this.ToTreeAttributes(farmlandAttributes, blockEntity);
         treeAttributes.SetAttribute("farmlandAttributes", farmlandAttributes);
+        var farmBlockCode = block.CodeWithVariant("state", "dry");
         return new[]
         {
-            new ItemStack(world.GetBlock(this.block.Code), 1) { Attributes = treeAttributes }
+            new ItemStack(world.GetBlock(farmBlockCode), 1) { Attributes = treeAttributes }
         };
     }
     
-    public void ToTreeAttributes(TreeAttribute tree, BlockEntityFarmland be)
+    public void ToTreeAttributes(TreeAttribute tree, IFarmlandBlockEntity be)
     {
         var slowReleaseNutrients = be.GetField<float[]>("slowReleaseNutrients");
         var permaBoosts = be.GetField<string[]>("permaBoosts");
         var fertilizerOverlayStrength = be.GetField<Dictionary<string, float>>("fertilizerOverlayStrength");
+        var originalFertility = be.GetOriginalFertility();
         tree.SetFloat("n", be.Nutrients[0]);
         tree.SetFloat("p", be.Nutrients[1]);
         tree.SetFloat("k", be.Nutrients[2]);
@@ -80,9 +78,9 @@ public class KeepNutrientsBehavior : BlockBehavior
             tree.SetFloat("slowK", slowReleaseNutrients[2]);
         }
         tree.SetFloat("moistureLevel", be.MoistureLevel);
-        tree.SetInt("originalFertilityN", be.originalFertility[0]);
-        tree.SetInt("originalFertilityP", be.originalFertility[1]);
-        tree.SetInt("originalFertilityK", be.originalFertility[2]);
+        tree.SetInt("originalFertilityN", originalFertility[0]);
+        tree.SetInt("originalFertilityP", originalFertility[1]);
+        tree.SetInt("originalFertilityK", originalFertility[2]);
 
         if (permaBoosts != null)
         {
@@ -95,7 +93,7 @@ public class KeepNutrientsBehavior : BlockBehavior
         foreach (KeyValuePair<string, float> keyValuePair in fertilizerOverlayStrength)
             treeAttribute.SetFloat(keyValuePair.Key, keyValuePair.Value);
     }
-    public void FromTreeAttributes(TreeAttribute tree, BlockEntityFarmland be)
+    public void FromTreeAttributes(TreeAttribute tree, IFarmlandBlockEntity be, IWorldAccessor worldForResolve)
     {
         be.Nutrients[0] = tree.GetFloat("n");
         be.Nutrients[1] = tree.GetFloat("p");
@@ -110,18 +108,15 @@ public class KeepNutrientsBehavior : BlockBehavior
                 tree.GetFloat("slowK")
             });
         }
-
+        be.SetOriginalFertility(tree, worldForResolve);
         be.SetField("moistureLevel", tree.GetFloat("moistureLevel"));
-        be.originalFertility[0] = tree.GetInt("originalFertilityN");
-        be.originalFertility[1] = tree.GetInt("originalFertilityP");
-        be.originalFertility[2] = tree.GetInt("originalFertilityK");
 
         var permaBoosts = tree.GetStringArray("permaBoosts");
         if (permaBoosts != null)
         {
             be.SetField("PermaBoosts", permaBoosts.ToHashSet());
         }
-
+        
         if (!tree.HasAttribute("fertilizerOverlayStrength")) return;
         var dictionary = new Dictionary<string, float>();
         if (tree["fertilizerOverlayStrength"] is TreeAttribute fertilizerOverlayStrength)

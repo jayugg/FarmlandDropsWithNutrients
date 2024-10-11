@@ -1,12 +1,17 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Vintagestory.API.Common;
 using Vintagestory.API.Datastructures;
+using Vintagestory.API.Util;
+using Vintagestory.GameContent;
 
 namespace FarmlandDropsWithNutrients;
 
 public static class Extensions
 {
+    #region treeAttributes
+
     public static TreeAttribute MergeWithFarmlandAttributes(this TreeAttribute farmlandAttributes, TreeAttribute farmlandAttributes2, int movedQuantity, int sinkSlotStackSize)
     {
         var mergedAttributes = new TreeAttribute();
@@ -99,5 +104,66 @@ public static class Extensions
                 farmlandAttributes.GetFloat("originalFertilityN") == 0 &&
                 farmlandAttributes.GetFloat("originalFertilityP") == 0 &&
                 farmlandAttributes.GetFloat("originalFertilityK") == 0);
+    }
+
+    #endregion
+
+    #region farmland
+
+    public static bool IsAcceptableFarmland(this BlockEntity be, out IFarmlandBlockEntity farmBe)
+    {
+        farmBe = be as IFarmlandBlockEntity;
+        return be.IsAcceptableFarmland();
+    }
+    
+    public static bool IsAcceptableFarmland(this BlockEntity be)
+    {
+        return be is IFarmlandBlockEntity && be.Block.Code.Path.Contains("farmland");
+    }
+    
+    public static bool IsAcceptableFarmland(this CollectibleObject block, out BlockFarmland farmBlock)
+    {
+        farmBlock = block as BlockFarmland;
+        return block.IsAcceptableFarmland();
+    }
+    
+    public static bool IsAcceptableFarmland(this CollectibleObject block)
+    {
+        return block is BlockFarmland && block.Code.Path.Contains("farmland");
+    }
+    
+    public static int[] GetOriginalFertility(this IFarmlandBlockEntity be)
+    {
+        var farmlandAttributes = new TreeAttribute();
+        ((BlockEntity) be).ToTreeAttributes(farmlandAttributes);
+        int[] originalFertility = new int[3];
+        originalFertility[0] = farmlandAttributes.GetInt("originalFertilityN");
+        originalFertility[1] = farmlandAttributes.GetInt("originalFertilityP");
+        originalFertility[2] = farmlandAttributes.GetInt("originalFertilityK");
+        return originalFertility;
+    }
+    
+    public static void SetOriginalFertility(this IFarmlandBlockEntity be, TreeAttribute tree, IWorldAccessor worldForResolve)
+    {
+        var farmlandAttributes = new TreeAttribute();
+        ((BlockEntity)be).ToTreeAttributes(farmlandAttributes);
+        farmlandAttributes.SetInt("originalFertilityN", tree.GetInt("originalFertilityN"));
+        farmlandAttributes.SetInt("originalFertilityP", tree.GetInt("originalFertilityP"));
+        farmlandAttributes.SetInt("originalFertilityK", tree.GetInt("originalFertilityK"));
+        ((BlockEntity)be).FromTreeAttributes(farmlandAttributes, worldForResolve);
+    }
+
+    #endregion
+    
+    public static void AddBehavior<T>(this CollectibleObject collectible) where T : CollectibleBehavior
+    {
+        var behavior = (T) Activator.CreateInstance(typeof(T), collectible);
+        collectible.CollectibleBehaviors = collectible.CollectibleBehaviors.Append(behavior);
+    }
+    
+    public static void AddBehavior<T>(this Block block) where T : BlockBehavior
+    {
+        var behavior = (T) Activator.CreateInstance(typeof(T), block);
+        block.BlockBehaviors = block.BlockBehaviors.Append(behavior);
     }
 }
