@@ -43,7 +43,7 @@ public class KeepNutrientsBehavior : BlockBehavior
         // Drop soil block if nutrients are default and moisture is 0
         var slowReleaseNutrients = blockEntity.GetField<float[]>("slowReleaseNutrients");
         if (blockEntity.Nutrients.Zip(blockEntity.GetOriginalFertility(), (n, o) => Math.Abs(n - o) < 0.001).Any(b => b)
-            && blockEntity.MoistureLevel < 0.001 && !slowReleaseNutrients.Any(n => n > 0.001))
+            && !slowReleaseNutrients.Any(n => n > 0.001))
         {
             return new[]
             {

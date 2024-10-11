@@ -12,7 +12,7 @@ using Vintagestory.GameContent;
         name: "Farmland Drops With Nutrients",
         modID: "farmlanddropswithnutrients",
         Side = "Universal",
-        Version = "1.1.0", Authors = new string[] { "jayugg" }, 
+        Version = "1.1.1", Authors = new string[] { "jayugg" }, 
         Description = "Pick up and and place farmland while preserving nutrients"
     )
 ]

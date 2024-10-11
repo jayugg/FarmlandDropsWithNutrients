@@ -9,13 +9,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="fae070b7-8b04-4575-a5b4-fb4248060365" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/changelog.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/.idea.FarmlandDropsWithNutrients/.idea/projectSettingsUpdater.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.FarmlandDropsWithNutrients/.idea/projectSettingsUpdater.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/.idea.FarmlandDropsWithNutrients/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.FarmlandDropsWithNutrients/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Extensions.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Extensions.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/FDWNCore.cs" beforeDir="false" afterPath="$PROJECT_DIR$/FDWNCore.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/KeepNutrientsBehavior.cs" beforeDir="false" afterPath="$PROJECT_DIR$/KeepNutrientsBehavior.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ReflectionExtensions.cs" beforeDir="false" afterPath="$PROJECT_DIR$/ReflectionExtensions.cs" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -61,6 +55,7 @@
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/SourcesCache/a4cb9591c21230d9be732f46914bf44e165d819809330102617bef23157b/ToCollection.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/SourcesCache/c03ecbf882ec617b54fbd5b46063c091a895e6f24a14a0411120ddd7f0ea7b/Dictionary.cs" root0="SKIP_HIGHLIGHTING" />
   </component>
+  <component name="MetaFilesCheckinStateConfiguration" checkMetaFiles="true" />
   <component name="ProjectColorInfo">{
   &quot;associatedIndex&quot;: 8
 }</component>
@@ -125,13 +120,23 @@
       <option name="presentableId" value="Default" />
       <updated>1717083017700</updated>
       <workItem from="1728513763210" duration="30224000" />
-      <workItem from="1728652302967" duration="3894000" />
+      <workItem from="1728652302967" duration="4862000" />
     </task>
+    <task id="LOCAL-00001" summary="Refactor for more generic farmland support, CAN crops compatibility">
+      <option name="closed" value="true" />
+      <created>1728656563163</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1728656563163</updated>
+    </task>
+    <option name="localTasksCounter" value="2" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="3" />
   </component>
+  <component name="UnityCheckinConfiguration" checkUnsavedScenes="true" />
   <component name="UnityProjectConfiguration" hasMinimizedUI="false" />
   <component name="Vcs.Log.Tabs.Properties">
     <option name="TAB_STATES">
@@ -146,5 +151,7 @@
   </component>
   <component name="VcsManagerConfiguration">
     <option name="CLEAR_INITIAL_COMMIT_MESSAGE" value="true" />
+    <MESSAGE value="Refactor for more generic farmland support, CAN crops compatibility" />
+    <option name="LAST_COMMIT_MESSAGE" value="Refactor for more generic farmland support, CAN crops compatibility" />
   </component>
 </project>
