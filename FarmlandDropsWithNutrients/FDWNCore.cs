@@ -7,15 +7,6 @@ using Vintagestory.API.MathTools;
 using Vintagestory.API.Util;
 using Vintagestory.GameContent;
 
-[assembly: 
-    ModInfo(
-        name: "Farmland Drops With Nutrients",
-        modID: "farmlanddropswithnutrients",
-        Side = "Universal",
-        Version = "1.1.1", Authors = new string[] { "jayugg" }, 
-        Description = "Pick up and and place farmland while preserving nutrients"
-    )
-]
 namespace FarmlandDropsWithNutrients;
 
 [HarmonyPatch]

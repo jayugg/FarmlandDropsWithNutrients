@@ -1,1 +1,0 @@
-- Ignore moisture when picking up farmland with default nutrient levels as soil

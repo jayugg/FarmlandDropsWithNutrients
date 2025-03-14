@@ -1,0 +1,1 @@
+- [Fix] Fixed farmland dropping soil if it has no fertiliser and any fertility value is the same as the original
