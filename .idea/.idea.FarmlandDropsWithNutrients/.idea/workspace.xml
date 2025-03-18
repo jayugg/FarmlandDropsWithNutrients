@@ -10,21 +10,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="d9198d8f-d513-4107-9b9e-89a8871676a4" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/CakeBuild/CakeBuild.csproj" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/CakeBuild/Program.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/FarmlandDropsWithNutrients.sln" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/FarmlandDropsWithNutrients/Extensions.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/FarmlandDropsWithNutrients/FDWNCore.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/FarmlandDropsWithNutrients/FarmlandDropsWithNutrients.csproj" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/FarmlandDropsWithNutrients/FarmlandWithNutrientsBehavior.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/FarmlandDropsWithNutrients/KeepNutrientsBehavior.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/FarmlandDropsWithNutrients/Properties/launchSettings.json" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/FarmlandDropsWithNutrients/ReflectionExtensions.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/FarmlandDropsWithNutrients/changelog.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/FarmlandDropsWithNutrients/modinfo.json" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/build.ps1" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/build.sh" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/.idea.FarmlandDropsWithNutrients/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.FarmlandDropsWithNutrients/.idea/workspace.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -37,6 +23,18 @@
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
+  <component name="GitHubPullRequestSearchHistory">{
+  &quot;lastFilter&quot;: {
+    &quot;state&quot;: &quot;OPEN&quot;,
+    &quot;assignee&quot;: &quot;jacopouggeri&quot;
+  }
+}</component>
+  <component name="GithubPullRequestsUISettings">{
+  &quot;selectedUrlAndAccountId&quot;: {
+    &quot;url&quot;: &quot;https://github.com/jayugg/FarmlandDropsWithNutrients.git&quot;,
+    &quot;accountId&quot;: &quot;456ee43c-a204-45ad-b149-a0551b542c36&quot;
+  }
+}</component>
   <component name="ProjectColorInfo">{
   &quot;associatedIndex&quot;: 8
 }</component>
@@ -121,7 +119,7 @@
       <option name="presentableId" value="Default" />
       <updated>1717083017700</updated>
       <workItem from="1741914958994" duration="516000" />
-      <workItem from="1741917685477" duration="433000" />
+      <workItem from="1741917685477" duration="1689000" />
     </task>
     <servers />
   </component>
