@@ -45,13 +45,13 @@ public static class Extensions
         mergedAttributes["fertilizerOverlayStrength"] = mergedFertilizerOverlayStrengthTree;
         return mergedAttributes;
     }
-    
-    public static float WeightedAverage(float a, float b, float weightA, float weightB)
+
+    private static float WeightedAverage(float a, float b, float weightA, float weightB)
     {
         return (a * weightA + b * weightB) / (weightA + weightB);
     }
-    
-    public static Dictionary<string, float> MergeDictionaries(Dictionary<string, float> dict1, Dictionary<string, float> dict2, int mergedQuantity, int sinkStackSize)
+
+    private static Dictionary<string, float> MergeDictionaries(Dictionary<string, float> dict1, Dictionary<string, float> dict2, int mergedQuantity, int sinkStackSize)
     {
         var sumDict = new Dictionary<string, float>();
         
@@ -75,7 +75,7 @@ public static class Extensions
         return avgDict;
     }
 
-    public static TreeAttribute MergeFertilizerOverlayStrength(TreeAttribute attr1, TreeAttribute attr2, int mergedQuantity, int sinkStackSize)
+    private static TreeAttribute MergeFertilizerOverlayStrength(TreeAttribute attr1, TreeAttribute attr2, int mergedQuantity, int sinkStackSize)
     {
         var mergedDict = MergeDictionaries(
             attr1.ToDictionary(k => k.Key, k => attr1.GetFloat(k.Key)),
@@ -136,7 +136,7 @@ public static class Extensions
     {
         var farmlandAttributes = new TreeAttribute();
         ((BlockEntity) be).ToTreeAttributes(farmlandAttributes);
-        int[] originalFertility = new int[3];
+        var originalFertility = new int[3];
         originalFertility[0] = farmlandAttributes.GetInt("originalFertilityN");
         originalFertility[1] = farmlandAttributes.GetInt("originalFertilityP");
         originalFertility[2] = farmlandAttributes.GetInt("originalFertilityK");

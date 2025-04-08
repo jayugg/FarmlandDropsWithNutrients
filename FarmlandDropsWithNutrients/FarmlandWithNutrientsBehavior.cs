@@ -20,12 +20,12 @@ public class FarmlandWithNutrientsBehavior : CollectibleBehavior
         if (HasDefaultNutrients(inSlot.Itemstack)) return;
         var farmlandAttributes = inSlot.Itemstack.Attributes.GetTreeAttribute("farmlandAttributes");
         dsc.AppendLine(Lang.Get("farmland-nutrientlevels", Math.Round(farmlandAttributes.GetFloat("n"), 1), Math.Round(farmlandAttributes.GetFloat("p"), 1), Math.Round(farmlandAttributes.GetFloat("k"), 1)));
-        float slowN = (float) Math.Round(farmlandAttributes.GetFloat("slowN"), 1);
-        float slowP = (float) Math.Round(farmlandAttributes.GetFloat("slowP"), 1);
-        float slowK = (float) Math.Round(farmlandAttributes.GetFloat("slowK"), 1);
+        var slowN = (float) Math.Round(farmlandAttributes.GetFloat("slowN"), 1);
+        var slowP = (float) Math.Round(farmlandAttributes.GetFloat("slowP"), 1);
+        var slowK = (float) Math.Round(farmlandAttributes.GetFloat("slowK"), 1);
         if (slowN > 0.0 || slowP > 0.0 || slowK > 0.0)
         {
-            List<string> values = new List<string>();
+            var values = new List<string>();
             if (slowN > 0.0)
                 values.Add(Lang.Get("+{0}% N", slowN));
             if (slowP > 0.0)
@@ -34,12 +34,12 @@ public class FarmlandWithNutrientsBehavior : CollectibleBehavior
                 values.Add(Lang.Get("+{0}% K", slowK));
             dsc.AppendLine(Lang.Get("farmland-activefertilizer", string.Join(", ", values)));
         }
-        float moisture = (float) Math.Round(farmlandAttributes.GetFloat("moistureLevel") * 100.0, 0);
-        string moistureColor = ColorUtil.Int2Hex(GuiStyle.DamageColorGradient[(int) Math.Min(99f, moisture)]);
+        var moisture = (float) Math.Round(farmlandAttributes.GetFloat("moistureLevel") * 100.0, 0);
+        var moistureColor = ColorUtil.Int2Hex(GuiStyle.DamageColorGradient[(int) Math.Min(99f, moisture)]);
         dsc.AppendLine(Lang.Get("farmland-moisture", moistureColor, moisture));
     }
 
-    private bool HasDefaultNutrients(ItemStack stack)
+    private static bool HasDefaultNutrients(ItemStack stack)
     {
         var farmlandAttributes = stack.Attributes.GetTreeAttribute("farmlandAttributes");
         return farmlandAttributes == null;

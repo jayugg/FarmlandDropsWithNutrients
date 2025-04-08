@@ -19,8 +19,8 @@ public class KeepNutrientsBehavior : BlockBehavior
     {
         world.BlockAccessor.SetBlock(block.BlockId, blockSel.Position, byItemStack);
         if (!world.BlockAccessor.GetBlockEntity(blockSel.Position).IsAcceptableFarmland(out var blockEntity)) return true;
-        var farmlandAttributes = ((TreeAttribute)byItemStack.Attributes).GetAttribute("farmlandAttributes") as TreeAttribute;
-        this.FromTreeAttributes(farmlandAttributes, blockEntity, world);
+        if (((TreeAttribute)byItemStack.Attributes).GetAttribute("farmlandAttributes") is not TreeAttribute farmlandAttributes) return true;
+        FromTreeAttributes(farmlandAttributes, blockEntity, world);
         ((BlockEntity)blockEntity).MarkDirty();
         handling = EnumHandling.PreventDefault;
         return true;
@@ -42,8 +42,11 @@ public class KeepNutrientsBehavior : BlockBehavior
         handling = EnumHandling.PreventDefault;
         // Drop soil block if nutrients are default and moisture is 0
         var slowReleaseNutrients = blockEntity.GetField<float[]>("slowReleaseNutrients");
-        if (!blockEntity.Nutrients.Zip(blockEntity.GetOriginalFertility(), (n, o) => Math.Abs(n - o) < 0.001).Any(b => b)
-            && !slowReleaseNutrients.Any(n => n > 0.001))
+        var hasDefaultNutrients = blockEntity.Nutrients.Zip(blockEntity.GetOriginalFertility(), (n, o) 
+            => Math.Abs(n - o)).All(x => x < 0.001);
+        var hasNoSlowReleaseNutrients = slowReleaseNutrients == null || slowReleaseNutrients.All(n => n < 0.001);
+        FDWNCore.Logger.Warning("hasDefaultNutrients: {0}, hasNoSlowReleaseNutrients: {1}", hasDefaultNutrients, hasNoSlowReleaseNutrients);
+        if (hasDefaultNutrients && hasNoSlowReleaseNutrients)
         {
             return new[]
             {
@@ -53,16 +56,16 @@ public class KeepNutrientsBehavior : BlockBehavior
         
         var treeAttributes = new TreeAttribute();
         var farmlandAttributes = new TreeAttribute();
-        this.ToTreeAttributes(farmlandAttributes, blockEntity);
+        ToTreeAttributes(farmlandAttributes, blockEntity);
         treeAttributes.SetAttribute("farmlandAttributes", farmlandAttributes);
         var farmBlockCode = block.CodeWithVariant("state", "dry");
         return new[]
         {
-            new ItemStack(world.GetBlock(farmBlockCode), 1) { Attributes = treeAttributes }
+            new ItemStack(world.GetBlock(farmBlockCode)) { Attributes = treeAttributes }
         };
     }
-    
-    public void ToTreeAttributes(TreeAttribute tree, IFarmlandBlockEntity be)
+
+    private static void ToTreeAttributes(TreeAttribute tree, IFarmlandBlockEntity be)
     {
         var slowReleaseNutrients = be.GetField<float[]>("slowReleaseNutrients");
         var permaBoosts = be.GetField<string[]>("permaBoosts");
@@ -90,10 +93,11 @@ public class KeepNutrientsBehavior : BlockBehavior
             return;
         var treeAttribute = new TreeAttribute();
         tree["fertilizerOverlayStrength"] = treeAttribute;
-        foreach (KeyValuePair<string, float> keyValuePair in fertilizerOverlayStrength)
+        foreach (var keyValuePair in fertilizerOverlayStrength)
             treeAttribute.SetFloat(keyValuePair.Key, keyValuePair.Value);
     }
-    public void FromTreeAttributes(TreeAttribute tree, IFarmlandBlockEntity be, IWorldAccessor worldForResolve)
+
+    private static void FromTreeAttributes(TreeAttribute tree, IFarmlandBlockEntity be, IWorldAccessor worldForResolve)
     {
         be.Nutrients[0] = tree.GetFloat("n");
         be.Nutrients[1] = tree.GetFloat("p");
@@ -101,7 +105,7 @@ public class KeepNutrientsBehavior : BlockBehavior
 
         if (tree.HasAttribute("slowN") && tree.HasAttribute("slowP") && tree.HasAttribute("slowK"))
         {
-            be.SetField("slowReleaseNutrients", new float[3]
+            be.SetField("slowReleaseNutrients", new[]
             {
                 tree.GetFloat("slowN"),
                 tree.GetFloat("slowP"),
@@ -132,7 +136,7 @@ public class KeepNutrientsBehavior : BlockBehavior
     public static TreeAttribute DefaultFarmlandAttributes(BlockFarmland block)
     {
         var tree = new TreeAttribute();
-        string key = block.LastCodePart();
+        var key = block.LastCodePart();
         tree.SetFloat("n", (int) BlockEntityFarmland.Fertilities[key]);
         tree.SetFloat("p", (int) BlockEntityFarmland.Fertilities[key]);
         tree.SetFloat("k", (int) BlockEntityFarmland.Fertilities[key]);

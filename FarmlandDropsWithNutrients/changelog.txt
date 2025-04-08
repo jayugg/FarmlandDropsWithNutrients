@@ -1,1 +1,2 @@
-- Recompiled for 1.20.5
+- [Fix] Fix dupe bug with placing creative-given farmland (unlikely to happen in survival)
+- [Fix] Farmland with default nutrients not dropping as soil
