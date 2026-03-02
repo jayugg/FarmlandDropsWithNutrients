@@ -38,14 +38,14 @@ public class FDWNCore : ModSystem
         foreach (var collectible in api.World.Collectibles.Where(c => c?.Code != null))
         {
             if (!collectible.IsAcceptableFarmland()) continue;
-            Logger.Warning($"Adding behavior to {collectible.Code}");
+            Logger.Event($"Adding behavior to {collectible.Code}");
             collectible.AddBehavior<FarmlandWithNutrientsBehavior>();
         }
             
         foreach (var block in api.World.Blocks.Where(b => b?.Code != null))
         {
             if (!block.IsAcceptableFarmland()) continue;
-            Logger.Warning($"Adding behavior to {block.Code}");
+            Logger.Event($"Adding behavior to {block.Code}");
             block.AddBehavior<KeepNutrientsBehavior>();
         }
     }
